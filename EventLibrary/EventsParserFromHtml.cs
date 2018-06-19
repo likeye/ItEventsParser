@@ -14,7 +14,7 @@ namespace EventLibrary
             var url = @"https://crossweb.pl/wydarzenia/" + city + "/";
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            var nodes = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div[1]/div[2]");
+            var nodes = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div");
             var innerTexts = nodes.Select(node => node.InnerText);
         }
     }
