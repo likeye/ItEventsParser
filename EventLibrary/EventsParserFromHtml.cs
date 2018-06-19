@@ -15,7 +15,7 @@ namespace EventLibrary
             var web = new HtmlWeb();
             var doc = web.Load(url);
             var nodes = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div[1]/div[2]");
-            var innerText = nodes.Select(node => node.InnerText);
+            var innerTexts = nodes.Select(node => node.InnerText);
         }
     }
 }
