@@ -61,6 +61,7 @@
   <ItemGroup>
     <Compile Include="OperationsOnDataBase.cs" />
     <Compile Include="Events.cs" />
+    <Compile Include="OperationsOnEventsAndDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
