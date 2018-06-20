@@ -36,11 +36,11 @@ namespace EventLibrary
                     Console.ReadLine();
                     return;
                 }
-
+                
                 command.Connection = connection;
-                command.CommandText = "Select * From Events";
+                command.CommandText = "INSERT INTO [Events] (Id,Name,Date,Description,Link) VALUES";
 
-                using (DbDataReader dataReader = command.ExecuteReader())
+                using (DbDataReader dataReader= command.ExecuteReader())
                 {
                     while (dataReader.Read())
                     {
