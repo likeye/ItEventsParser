@@ -7,17 +7,17 @@ using HtmlAgilityPack;
 
 namespace EventLibrary
 {
-    public class EventsParserFromHtml : IParse
+    public class EventsParser : IParse
     {
-        readonly List<Events> _eventsList = new List<Events>();
-        public List<Events> Parse(string city)
+        readonly List<Event> _eventsList = new List<Event>();
+        public List<Event> Parse(string city)
         {
-            var nodes = GetNodes(city);
+            var nodes = getNodes(city);
             foreach (var item in nodes)
             {
                 if (item.SelectSingleNode("a/div[1]") != null)
                 {
-                    Events eventParsed = new Events();
+                    Event eventParsed = new Event();
                     eventParsed.Name = item.SelectSingleNode("a/div[@class=\"colTab title\"]").InnerText.Trim();
                     eventParsed.Date = item.SelectSingleNode("a/div[@class=\"colTab date \"]/span[@class=\"colDataDay\"]").InnerText.Trim();
                     eventParsed.Description = item.SelectSingleNode("a/div[@class=\"colTab topic phoneOff\"]").InnerText.Trim();
@@ -27,14 +27,14 @@ namespace EventLibrary
             }
             return _eventsList;
         }
-        public void ShowParsedList(List<Events> list)
+        public void ShowParsedList(List<Event> list)
         {
             for (int i = 0; i < list.Count; i++)
             {
                 Console.WriteLine($"Name: {_eventsList[i].Name} Date: {_eventsList[i].Date} Description: {_eventsList[i].Description} \n Link: {_eventsList[i].Link} \n");
             }
         }
-        private IEnumerable<HtmlNode> GetNodes(string city)
+        private IEnumerable<HtmlNode> getNodes(string city)
         {
             var url = @"https://crossweb.pl/wydarzenia/" + city + "/";
             var web = new HtmlWeb();
