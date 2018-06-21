@@ -7,27 +7,46 @@ using HtmlAgilityPack;
 
 namespace EventLibrary
 {
-    public class EventsParserFromHtml
+    public class EventsParserFromHtml : IParse
     {
-        public void Parser(string city)
+        private List<Events> eventsList = new List<Events>();
+        private Events eventParsed = new Events();
+
+        public List<Events> ParseToList(string city)
         {
+            var nodes = getNodes(city);
+            foreach (var item in nodes)
+            {
+                if (item.SelectSingleNode("a/div[1]") != null)
+                {
+                    eventParsed.Name = item.SelectSingleNode("a/div[@class=\"colTab title\"]").InnerText.Trim();
+                    eventParsed.Date = item.SelectSingleNode("a/div[@class=\"colTab date \"]/span[@class=\"colDataDay\"]").InnerText.Trim();
+                    eventParsed.Description = item.SelectSingleNode("a/div[@class=\"colTab topic phoneOff\"]").InnerText.Trim();
+                    eventParsed.Link = "https://crossweb.pl/" + item.SelectSingleNode("a").Attributes["href"].Value.Trim();
+                    eventsList.Add(eventParsed);
+                }
+            }
+
+            return eventsList;
+        }
+
+        public void showParsedList(List<Events> list)
+        {
+            for (int i = 0; i < list.Count; i++)
+            {
+                Console.WriteLine($"Name: {eventsList[i].Name} Date: {eventsList[i].Date} Description: {eventsList[i].Description} \n Link: {eventsList[i].Link} \n");
+            }
+        }
+
+        private IEnumerable<HtmlNode> getNodes(string city)
+        {
+            city = "wroclaw";
             var url = @"https://crossweb.pl/wydarzenia/" + city + "/";
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            var nodeNames = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab title\"]"); //to i 
-            var nodeDatas = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div/span[@class=\"colDataDay\"]");
-            var nodeDescriptions = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab topic phoneOff\"]"); // to teoretycznie jest so samo (?)
-            var nodeLinks = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a");
-            //foreach (HtmlNode node in doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div/span") )
-            //{
-            //    var text = node.Attributes[]
-            //}
-
-            var innerTextNames = nodeNames.Select(node => node.InnerText);
-            var innerTextDatas = nodeDatas.Select(node => node.InnerText);
-            var innerTextDescriptions = nodeDescriptions.Select(node => node.InnerText);
-            var innerTextLinks = nodeLinks.Select(node => node.InnerText);
-            
+            var node = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div[@class=\"event-list \"]");
+            var nodes = node.Elements("div");
+            return nodes;
         }
     }
 }
