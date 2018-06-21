@@ -9,6 +9,7 @@ namespace EventLibrary
 {
     public class DataBaseOperations : IDBOperations
     {
+        private SMTPOperations _smtpOperations = new SMTPOperations();
         readonly string _connectionString = ConfigurationManager.AppSettings["connectionString"];
         private String query = "IF NOT EXISTS (SELECT * FROM [Events] WHERE Name=@name AND Date=@date AND Description=@description AND Link=@link) " +
                                "INSERT INTO [Events] (Name,Date,Description,Link) VALUES (@name,@date,@description, @link)";
@@ -28,7 +29,15 @@ namespace EventLibrary
                         command.Parameters.AddWithValue("@link", item.Link);
                         int result = command.ExecuteNonQuery();
                         if (result < 0)
+                        {
                             Console.WriteLine("Error inserting data");
+                        }
+                        else
+                        {
+                            var body =_smtpOperations.BodyOfEmail(item);
+                            var mail =_smtpOperations.CreateEmail(body);
+                            _smtpOperations.SendEmail(mail);
+                        }
                         connection.Close();
                     }
                 }

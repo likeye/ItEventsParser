@@ -64,7 +64,9 @@
     <Compile Include="EventsParserFromHtml.cs" />
     <Compile Include="IDBOperations.cs" />
     <Compile Include="IParse.cs" />
+    <Compile Include="ISMTPOperations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMTPOperations.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
