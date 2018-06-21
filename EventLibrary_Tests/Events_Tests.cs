@@ -10,35 +10,17 @@ namespace EventLibrary_Tests
 {
     public class Events_Tests
     {
-        public Events events1 = new Events("abba", "11.03", "abba", "www.abba.pl");
+        public Events events1 = new Events();
 
-        [Test]
-        public void events_ReturnStringName()
+        [TestCase("abba","11.03","abba","www.abba.pl")]
+        public void events_ReturnStringName(string name, string date, string desc, string link)
         {
-            var text = events1.GetName();
-            var expectedResult = "abba";
-            Assert.AreEqual(expectedResult,text);
-        }
-        [Test]
-        public void events_ReturnStringDate()
-        {
-            var text = events1.GetDate();
-            var expectedResult = "11.03";
-            Assert.AreEqual(expectedResult, text);
-        }
-        [Test]
-        public void events_ReturnStringDesc()
-        {
-            var text = events1.GetDesc();
-            var expectedResult = "abba";
-            Assert.AreEqual(expectedResult, text);
-        }
-        [Test]
-        public void events_ReturnStringLink()
-        {
-            var text = events1.GetLink();
-            var expectedResult = "www.abba.pl";
-            Assert.AreEqual(expectedResult, text);
+            events1.Date = date;
+            events1.Name = name;
+            events1.Description = desc;
+            events1.Link = link;
+
+            //??
         }
     }
 }
