@@ -9,7 +9,7 @@ namespace EventLibrary
 {
     public class EventsParserFromHtml : IParse
     {
-        readonly List<Events> _eventsList = new List<Events>();
+        private readonly List<Events> _eventsList = new List<Events>();
         public List<Events> Parse(string city)
         {
             var nodes = GetNodes(city);
