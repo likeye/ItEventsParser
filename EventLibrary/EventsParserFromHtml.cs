@@ -11,8 +11,7 @@ namespace EventLibrary
     {
         private List<Events> eventsList = new List<Events>();
         private Events eventParsed = new Events();
-
-        public List<Events> ParseToList(string city)
+        public List<Events> Parse(string city)
         {
             var nodes = getNodes(city);
             foreach (var item in nodes)
@@ -26,10 +25,8 @@ namespace EventLibrary
                     eventsList.Add(eventParsed);
                 }
             }
-
             return eventsList;
         }
-
         public void showParsedList(List<Events> list)
         {
             for (int i = 0; i < list.Count; i++)
@@ -37,7 +34,6 @@ namespace EventLibrary
                 Console.WriteLine($"Name: {eventsList[i].Name} Date: {eventsList[i].Date} Description: {eventsList[i].Description} \n Link: {eventsList[i].Link} \n");
             }
         }
-
         private IEnumerable<HtmlNode> getNodes(string city)
         {
             city = "wroclaw";

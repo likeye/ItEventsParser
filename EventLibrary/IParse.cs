@@ -8,6 +8,6 @@ namespace EventLibrary
 {
     public interface IParse
     {
-        List<Events> ParseToList(string city);
+        List<Events> Parse(string city);
     }
 }
