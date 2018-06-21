@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 using System.Net;
 using System.Net.Mail;
 using System.Configuration;
+using EventLibrary.Interfaces;
+using EventLibrary.DB;
+using EventLibrary.EventClasses;
 
-namespace EventLibrary
+namespace EventLibrary.SMTP
 {
-    public class SMTPOperations : ISMTPOperations
+    public class SmtpOperations : ISmtpOperations
     {
-        public string BodyOfEmail(Events parsedEvent)
+        public string BodyOfEmail(Event parsedEvent)
         {
             string body = "";
             body +=

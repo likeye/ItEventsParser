@@ -17,9 +17,9 @@ namespace EventLibrary_Tests
             var url = @"https://crossweb.pl/wydarzenia/" + city + "/";
             var web = new HtmlWeb();
             var doc = web.Load(url);
-            var nodeNames = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab title\"]"); //to i 
+            var nodeNames = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab title\"]"); 
             var nodeDatas = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div/span[@class=\"colDataDay\"]");
-            var nodeDescriptions = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab topic phoneOff\"]"); // to teoretycznie jest so samo (?)
+            var nodeDescriptions = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a/div[@class=\"colTab topic phoneOff\"]");
             var nodeLinks = doc.DocumentNode.SelectNodes("//*[@id=\"container\"]/div/div/a");
             string result = "";
             foreach (var item in nodeNames)

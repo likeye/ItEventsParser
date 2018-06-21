@@ -4,13 +4,15 @@ using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace EventLibrary
+using EventLibrary.EventClasses;
+using EventLibrary.DB;
+using EventLibrary.SMTP;
+namespace EventLibrary.Interfaces
 {
-    public interface ISMTPOperations
+    public interface ISmtpOperations
     {
         void SendEmail(MailMessage mail);
-        string BodyOfEmail(Events parsedEvent);
+        string BodyOfEmail(Event parsedEvent);
         MailMessage CreateEmail(string body);
     }
 }

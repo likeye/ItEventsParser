@@ -4,15 +4,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
+using EventLibrary.Interfaces;
+using EventLibrary.DB;
+using EventLibrary.SMTP;
 
-namespace EventLibrary
+namespace EventLibrary.EventClasses
 {
     public class EventsParser : IParse
     {
-        readonly List<Event> _eventsList = new List<Event>();
+        private readonly List<Event> _eventsList = new List<Event>();
         public List<Event> Parse(string city)
         {
-            var nodes = getNodes(city);
+            var nodes = GetNodes(city);
             foreach (var item in nodes)
             {
                 if (item.SelectSingleNode("a/div[1]") != null)
@@ -34,7 +37,7 @@ namespace EventLibrary
                 Console.WriteLine($"Name: {_eventsList[i].Name} Date: {_eventsList[i].Date} Description: {_eventsList[i].Description} \n Link: {_eventsList[i].Link} \n");
             }
         }
-        private IEnumerable<HtmlNode> getNodes(string city)
+        private IEnumerable<HtmlNode> GetNodes(string city)
         {
             var url = @"https://crossweb.pl/wydarzenia/" + city + "/";
             var web = new HtmlWeb();

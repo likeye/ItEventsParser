@@ -4,17 +4,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EventLibrary;
+using EventLibrary.Interfaces;
+using EventLibrary.DB;
+using EventLibrary.SMTP;
+using EventLibrary.EventClasses;
 namespace AppEvent
 {
     class Program
     {
         static void Main(string[] args)
         {
-            EventsParserFromHtml eventsParser = new EventsParserFromHtml();
+            EventsParser eventsParser = new EventsParser();
             DataBaseOperations dbOperations = new DataBaseOperations();
             var eventsList = eventsParser.Parse("wroclaw");
             eventsParser.ShowParsedList(eventsList);
-            dbOperations.InsertData(eventsList);   
+            dbOperations.Insert(eventsList);   
             Console.ReadKey();
         }
     }

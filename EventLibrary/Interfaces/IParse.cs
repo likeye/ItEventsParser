@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-namespace EventLibrary
+using EventLibrary.EventClasses;
+using EventLibrary.DB;
+using EventLibrary.SMTP;
+namespace EventLibrary.Interfaces
 {
     public interface IParse
     {
-        List<Events> Parse(string city);
+        List<Event> Parse(string city);
     }
 }

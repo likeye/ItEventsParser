@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace EventLibrary
+namespace EventLibrary.EventClasses
 {
     public class Event
     {
