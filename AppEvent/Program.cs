@@ -16,9 +16,9 @@ namespace AppEvent
         {
             EventsParser eventsParser = new EventsParser();
             DataBaseOperations dbOperations = new DataBaseOperations();
-            var eventsList = eventsParser.Parse("wroclaw");
+            var eventsList = eventsParser.Parse("warszawa",null, null);
             eventsParser.ShowParsedList(eventsList);
-            dbOperations.Insert(eventsList);   
+            //dbOperations.Insert(eventsList);   
             Console.ReadKey();
         }
     }

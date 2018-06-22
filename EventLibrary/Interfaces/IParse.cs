@@ -10,6 +10,6 @@ namespace EventLibrary.Interfaces
 {
     public interface IParse
     {
-        List<Event> Parse(string city);
+        List<Event> Parse(string city,string type, string cost);
     }
 }
