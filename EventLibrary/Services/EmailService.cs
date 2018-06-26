@@ -5,7 +5,7 @@ using System.Configuration;
 using EventLibrary.Interfaces;
 using EventLibrary.EventClasses;
 
-namespace EventLibrary.SMTP
+namespace EventLibrary.Services
 {
     public class EmailService : IEmail
     {

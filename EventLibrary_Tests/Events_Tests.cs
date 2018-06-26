@@ -1,9 +1,8 @@
-﻿using System;
-using AutoFixture;
+﻿using AutoFixture;
 using AutoFixture.NUnit3;
 using EventLibrary.EventClasses;
 using EventLibrary.Interfaces;
-using EventLibrary.SMTP;
+using EventLibrary.Services;
 using NUnit.Framework;
 
 namespace EventLibrary_Tests

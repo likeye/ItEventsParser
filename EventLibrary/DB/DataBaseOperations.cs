@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Configuration;
 using EventLibrary.Interfaces;
 using EventLibrary.EventClasses;
-using EventLibrary.SMTP;
+using EventLibrary.Services;
 
 namespace EventLibrary.DB
 {

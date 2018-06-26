@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EventLibrary;
-using EventLibrary.Interfaces;
-using EventLibrary.DB;
-using EventLibrary.SMTP;
+﻿using EventLibrary.DB;
 using EventLibrary.EventClasses;
+using EventLibrary.Services;
+using System;
 namespace AppEvent
 {
     class Program
