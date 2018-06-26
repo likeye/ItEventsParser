@@ -1,29 +1,41 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NUnit.Framework;
-using EventLibrary;
+using AutoFixture;
+using AutoFixture.NUnit3;
 using EventLibrary.EventClasses;
-using EventLibrary.DB;
+using EventLibrary.Interfaces;
 using EventLibrary.SMTP;
+using NUnit.Framework;
 
 namespace EventLibrary_Tests
 {
     public class Events_Tests
     {
-        public Event events1 = new Event();
-
-        [TestCase("abba","11.03","abba","www.abba.pl")]
-        public void Events_ReturnStringName(string name, string date, string desc, string link)
+        [Test]
+        public void Events_IsNUll_ReturnEmptyBodyMessage()
         {
-            events1.Date = date;
-            events1.Name = name;
-            events1.Description = desc;
-            events1.Link = link;
+            IEmail mock = new EmailServiceMock();
 
-            //??
+            var result = mock.PrepareBody(null);
+
+            //Assert.Throws<Exception>
+            Assert.IsEmpty(result);
+        }
+
+        [Test]
+        [AutoData]
+        //TestCase'y
+        public void Events_IsNotNull_ReturnMessage()
+        {
+            // Arrange
+            Fixture fixture = new Fixture();
+
+            var testEvent = fixture.Create<Event>();
+
+            IEmail mock = new EmailServiceMock();
+
+            var result = mock.PrepareBody(testEvent);
+
+            Assert.IsTrue(result.Length > 0);
         }
     }
 }

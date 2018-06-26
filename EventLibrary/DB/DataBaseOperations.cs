@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Configuration;
 using EventLibrary.Interfaces;
 using EventLibrary.EventClasses;
@@ -13,7 +10,7 @@ namespace EventLibrary.DB
 {
     public class DataBaseOperations : IDbOperations
     {
-        private readonly SmtpOperations _smtpOperations = new SmtpOperations();
+        private readonly EmailService _emailService = new EmailService();
         private readonly string _connectionString = ConfigurationManager.AppSettings["connectionString"];
         private readonly string _query = Resource1.query;
         public void Insert(IEnumerable<Event> eventsList)
@@ -36,9 +33,16 @@ namespace EventLibrary.DB
                         }
                         else
                         {
-                            var body =_smtpOperations.BodyOfEmail(item);
-                            var mail =_smtpOperations.CreateEmail(body);
-                            _smtpOperations.SendEmail(mail);
+                            try
+                            {
+                                var body = _emailService.PrepareBody(item);
+                                var mail = _emailService.Create(body);
+                                _emailService.Send(mail);
+                            }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e);
+                            }
                         }
                         connection.Close();
                     }
