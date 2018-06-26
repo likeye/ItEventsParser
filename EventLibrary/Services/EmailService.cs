@@ -1,15 +1,14 @@
-﻿using System;
+﻿using EventLibrary.Interfaces;
+using System;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
-using EventLibrary.Interfaces;
-using EventLibrary.EventClasses;
 
 namespace EventLibrary.Services
 {
     public class EmailService : IEmail
     {
-        public string PrepareBody(Event parsedEvent)
+        public string PrepareBody(DB.Event parsedEvent)
         {
             if (parsedEvent == null)
                 throw new ArgumentException("Event is null");
@@ -40,7 +39,7 @@ namespace EventLibrary.Services
 
     public class EmailServiceMock : IEmail
     {
-        public string PrepareBody(Event parsedEvent)
+        public string PrepareBody(DB.Event parsedEvent)
         {
             string body = "";
             body +=

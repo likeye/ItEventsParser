@@ -1,7 +1,8 @@
-﻿using EventLibrary.DB;
-using EventLibrary.EventClasses;
-using EventLibrary.Services;
+﻿using EventClasses.EventParser;
+using EventLibrary.DB;
 using System;
+using System.Configuration;
+
 namespace AppEvent
 {
     class Program
@@ -10,9 +11,9 @@ namespace AppEvent
         {
             EventsParser eventsParser = new EventsParser();
             DataBaseOperations dbOperations = new DataBaseOperations();
-            var eventsList = eventsParser.Parse("warszawa",null, null);
+            var eventsList = eventsParser.Parse(ConfigurationManager.AppSettings["city"],ConfigurationManager.AppSettings["type"],ConfigurationManager.AppSettings["cost"]);
             eventsParser.ShowParsedList(eventsList);
-            //dbOperations.Insert(eventsList);   
+            dbOperations.Insert(eventsList);   
             Console.ReadKey();
         }
     }

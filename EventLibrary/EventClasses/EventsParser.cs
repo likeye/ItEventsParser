@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using HtmlAgilityPack;
 using EventLibrary.Interfaces;
+using EventLibrary.EventClasses;
 
-namespace EventLibrary.EventClasses
+namespace EventClasses.EventParser
 {
     public class EventsParser : IParse
     {
@@ -98,7 +99,6 @@ namespace EventLibrary.EventClasses
             }
             
         }
-
         private string NodeName(HtmlNode item)
         {
             return item.SelectSingleNode("a/div[@class=\"colTab title\"]").InnerText.Trim();
