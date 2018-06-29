@@ -1,12 +1,10 @@
-﻿using System.Net.Mail;
-using EventLibrary.EventClasses;
+﻿using System.Collections.Generic;
+using System.Net.Mail;
 
 namespace EventLibrary.Interfaces
 {
     public interface IEmail
     {
-        void Send(MailMessage mail);
-        string PrepareBody(Event parsedEvent);
-        MailMessage Create(string body);
+        void Send(IEnumerable<DB.Event> eventList);     
     }
 }

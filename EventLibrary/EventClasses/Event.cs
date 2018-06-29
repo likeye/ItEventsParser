@@ -6,5 +6,7 @@
         public string Date { get; set; }
         public string Description { get; set; }
         public string Link { get; set; }
+        public string City { get; set; }
+        public string HasSentEmail { get; set; }
     }
 }

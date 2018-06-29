@@ -2,81 +2,92 @@
 using System.Collections.Generic;
 using HtmlAgilityPack;
 using EventLibrary.Interfaces;
+using EventLibrary.EventClasses;
 
-namespace EventLibrary.EventClasses
+namespace EventClasses.EventParser
 {
     public class EventsParser : IParse
     {
         private readonly List<Event> _eventsList = new List<Event>();
+
         public IEnumerable<Event> Parse(string city, string type, string cost)
         {
-            var nodes = GetNodes(city);
-            foreach (var item in nodes)
+            var cities = city.Split(' ');
+            foreach (var item in cities)
             {
-                if (item.SelectSingleNode("a/div[1]") != null)
+                var nodes = GetNodes(item);
+                foreach (var element in nodes)
                 {
-                    if (type == null && cost == null)
+                    if (element.SelectSingleNode("a/div[1]") != null)
                     {
-                        var eventParsed = new Event
+                        if (type == null && cost == null)
                         {
-                            Name = NodeName(item),
-                            Date = NodeDate(item),
-                            Description = NodeDesc(item),
-                            Link = NodeLink(item)
-                        };
-                        _eventsList.Add(eventParsed);
-                    }
-                    else if (type != null && cost == null)
-                    {
-                        if (NodeDesc(item).Contains(type))
-                        {
-                            Event eventParsed = new Event
+                            var eventParsed = new Event
                             {
-                                Name = NodeName(item),
-                                Date = NodeDate(item),
-                                Description = NodeDesc(item),
-                                Link = NodeLink(item)
+                                Name = NodeName(element),
+                                Date = NodeDate(element),
+                                Description = NodeDesc(element),
+                                Link = NodeLink(element),
+                                City = item
                             };
                             _eventsList.Add(eventParsed);
                         }
-                    }
-                    else if (type == null)
-                    {
-                        if (NodeCost(item).Contains(cost))
+                        else if (type != null && cost == null)
                         {
-                            Event eventParsed = new Event
+                            if (NodeDesc(element).Contains(type))
                             {
-                                Name = NodeName(item),
-                                Date = NodeDate(item),
-                                Description = NodeDesc(item),
-                                Link = NodeLink(item)
-                            };
-                            _eventsList.Add(eventParsed);
+                                Event eventParsed = new Event
+                                {
+                                    Name = NodeName(element),
+                                    Date = NodeDate(element),
+                                    Description = NodeDesc(element),
+                                    Link = NodeLink(element),
+                                    City = item
+                                };
+                                _eventsList.Add(eventParsed);
+                            }
                         }
-                    }
-                    else
-                    {
-                        if (NodeCost(item).Contains(cost) && NodeDesc(item).Contains(type))
+                        else if (type == null)
                         {
-                            Event eventParsed = new Event
+                            if (NodeCost(element).Contains(cost))
                             {
-                                Name = NodeName(item),
-                                Date = NodeDate(item),
-                                Description = NodeDesc(item),
-                                Link = NodeLink(item)
-                            };
-                            _eventsList.Add(eventParsed);
+                                Event eventParsed = new Event
+                                {
+                                    Name = NodeName(element),
+                                    Date = NodeDate(element),
+                                    Description = NodeDesc(element),
+                                    Link = NodeLink(element),
+                                    City = item
+                                };
+                                _eventsList.Add(eventParsed);
+                            }
+                        }
+                        else
+                        {
+                            if (NodeCost(element).Contains(cost) && NodeDesc(element).Contains(type))
+                            {
+                                Event eventParsed = new Event
+                                {
+                                    Name = NodeName(element),
+                                    Date = NodeDate(element),
+                                    Description = NodeDesc(element),
+                                    Link = NodeLink(element),
+                                    City = item
+                                };
+                                _eventsList.Add(eventParsed);
+                            }
                         }
                     }
                 }
             }
             return _eventsList;
         }
+
         public void ShowParsedList(IEnumerable<Event> list)
         {
             foreach (var item in list)
             {
-                Console.WriteLine($"Name: {item.Name} Date: {item.Date} Description: {item.Description} \n Link: {item.Link} \n");
+                Console.WriteLine($"Name: {item.Name} Date: {item.Date} Description: {item.Description} \n Link: {item.Link} City: {item.City} \n");
             }
         }
         private IEnumerable<HtmlNode> GetNodes(string city)
@@ -96,16 +107,15 @@ namespace EventLibrary.EventClasses
                 var nodes = node1.Elements("div");
                 return nodes;
             }
-            
-        }
 
+        }
         private string NodeName(HtmlNode item)
         {
             return item.SelectSingleNode("a/div[@class=\"colTab title\"]").InnerText.Trim();
         }
         private string NodeDate(HtmlNode item)
         {
-             return item.SelectSingleNode("a/div/span[@class=\"colDataDay\"]").InnerText.Trim();
+            return item.SelectSingleNode("a/div/span[@class=\"colDataDay\"]").InnerText.Trim();
         }
         private string NodeDesc(HtmlNode item)
         {

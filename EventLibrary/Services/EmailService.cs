@@ -1,26 +1,32 @@
-﻿using System;
+﻿using EventLibrary.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Net;
 using System.Net.Mail;
-using System.Configuration;
-using EventLibrary.Interfaces;
-using EventLibrary.EventClasses;
+using EventLibrary.DB;
+using NUnit.Framework.Internal.Commands;
 
 namespace EventLibrary.Services
 {
     public class EmailService : IEmail
     {
-        public string PrepareBody(Event parsedEvent)
-        {
-            if (parsedEvent == null)
-                throw new ArgumentException("Event is null");
+        private readonly DataBaseOperations _dbOperations = new DataBaseOperations();
+        private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
 
-            string body = "";
-            body +=
-                $"A new event has appeared!!! \n Event's name: {parsedEvent.Name} event's date: {parsedEvent.Date} " +
-                $"event's description: {parsedEvent.Description} \n Link: {parsedEvent.Link}";
-            return body;
+        private string PrepareBody(DB.Event parsedEvent)
+        {
+                DB.Event eventEmailSent = new Event()
+                    {HasSentEmail = "Yes"};
+                _dbOperations.UpdateEvent(parsedEvent.id, eventEmailSent);
+
+                string body = "";
+                body +=
+                    $"A new event has appeared!!! \n Event's name: {parsedEvent.Name} \n event's date: {parsedEvent.Date} \n" +
+                    $"event's description: {parsedEvent.Description} \n Link: {parsedEvent.Link} \n City {parsedEvent.City}";
+                return body;
         }
-        public MailMessage Create(string body)
+        private MailMessage Create(string body)
         {
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(ConfigurationManager.AppSettings["author"]);
@@ -29,37 +35,24 @@ namespace EventLibrary.Services
             mail.Body = body;
             return mail;
         }
-        public void Send(MailMessage mail)
+        public void Send(IEnumerable<DB.Event> eventList)
         {
-            SmtpClient smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
-            smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"], ConfigurationManager.AppSettings["password"]);
-            smtp.EnableSsl = true;
-            smtp.Send(mail);
-        }
-    }
-
-    public class EmailServiceMock : IEmail
-    {
-        public string PrepareBody(Event parsedEvent)
-        {
-            string body = "";
-            body +=
-                $"A new event has appeared!!! \n Event's name: {parsedEvent.Name} event's date: {parsedEvent.Date} " +
-                $"event's description: {parsedEvent.Description} \n Link: {parsedEvent.Link}";
-            return body;
-        }
-        public MailMessage Create(string body)
-        {
-            MailMessage mail = new MailMessage();
-            mail.From = new MailAddress(ConfigurationManager.AppSettings["author"]);
-            mail.To.Add(ConfigurationManager.AppSettings["sTo"]);
-            mail.Subject = "New Event!";
-            mail.Body = body;
-            return mail;
-        }
-        public void Send(MailMessage mail)
-        {
-            Console.WriteLine("Email sent");
+            foreach (var dbEvent in eventList)
+            {
+                if (dbEvent.HasSentEmail != "Yes")
+                {
+                    var body = PrepareBody(dbEvent);
+                    var mail = Create(body);
+                    _smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"],
+                        ConfigurationManager.AppSettings["password"]);
+                    _smtp.EnableSsl = true;
+                    _smtp.Send(mail);
+                }
+                else
+                {
+                    Console.WriteLine("Email has already been sent");
+                }
+            }
         }
     }
 }
