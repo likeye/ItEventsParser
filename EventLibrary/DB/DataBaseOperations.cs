@@ -2,6 +2,8 @@
 using EventLibrary.Services;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Migrations;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 
 namespace EventLibrary.DB
@@ -19,7 +21,8 @@ namespace EventLibrary.DB
                     Date = item.Date,
                     Description = item.Description,
                     Link = item.Link,
-                    Name = item.Name
+                    Name = item.Name,
+                    City = item.City
                 };
                 _eventList.Add(dbEvent);
             }
@@ -61,6 +64,124 @@ namespace EventLibrary.DB
                 }
             }
         }
+        public void ReadAll()
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    var ptx = (from r in context.Events select r);
+                }
+                else
+                {
+                    Console.WriteLine("Table is empty");
+                }
+            }
+        }
+        public void ReadSingle(int? id, string name)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    if (id != null && name == null)
+                    {
+                        var ptx = (from r in context.Events where r.id == id select r);
+                    }
+                    else
+                    {
+                        var ptx = (from r in context.Events where r.Name == name select r);
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Table is empty");
+                }
+            }
+        }
+        public void DeleteSingle(string name, int? id)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    if (id != null && name == null)
+                    {
+                        DB.Event db = new DB.Event()
+                        {
+                            id = id ?? default(int)
+                        };
+                        context.Events.Remove(db);
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        DB.Event db = new DB.Event()
+                        {
+                            Name = name
+                        };
+                        context.Events.Remove(db);
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Table is empty");
+                }
+            }
+        }
+
+        public void UpdateEvent(int? dbEventId, string dbEventName, string newName, string newDesc, string newLink, string newCity, string newDate)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    if (dbEventId != null && dbEventName == null)
+                    {
+                        DB.Event db = new DB.Event()
+                        {
+                            Name = newName,
+                            City = newCity,
+                            Date = newDate,
+                            Description = newDesc,
+                            Link = newLink
+                        };
+                        var dep = context.Events.First(item => item.id == dbEventId);
+                        dep.Name = newName;
+                        dep.Description = newDesc;
+                        dep.City = newCity;
+                        dep.Date = newDate;
+                        dep.Link = newLink;
+                        context.SaveChanges();
+                    }
+                    else
+                    {
+                        DB.Event db = new DB.Event()
+                        {
+                            Name = newName,
+                            City = newCity,
+                            Date = newDate,
+                            Description = newDesc,
+                            Link = newLink
+                        };
+                        var dep = context.Events.First(item => item.Name == dbEventName);
+                        dep.Name = newName;
+                        dep.Description = newDesc;
+                        dep.City = newCity;
+                        dep.Date = newDate;
+                        dep.Link = newLink;
+                        context.SaveChanges();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Table is empty");
+                }
+            }
+        }
+
+        // wersja sql
         //private readonly string _connectionString = ConfigurationManager.AppSettings["connectionString"];
         // private readonly string _query = Resource1.query;
         //public void Insert(IEnumerable<Event> eventsList)
