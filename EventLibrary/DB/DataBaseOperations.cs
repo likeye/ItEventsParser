@@ -10,7 +10,6 @@ namespace EventLibrary.DB
 {
     public class DataBaseOperations : IDbOperations
     {
-        private readonly EmailService _emailService = new EmailService();
         private readonly List<DB.Event> _eventList = new List<DB.Event>();
         private List<DB.Event> ParseToDbEventList(IEnumerable<EventClasses.Event> eventsList)
         {
@@ -22,7 +21,8 @@ namespace EventLibrary.DB
                     Description = item.Description,
                     Link = item.Link,
                     Name = item.Name,
-                    City = item.City
+                    City = item.City,
+                    HasSentEmail = null
                 };
                 _eventList.Add(dbEvent);
             }
@@ -37,6 +37,7 @@ namespace EventLibrary.DB
                 {
                     foreach (var item in parsedList)
                     {
+                        item.HasSentEmail = "Yes";
                         context.Events.Add(item);
                         context.SaveChanges();
                     }
@@ -49,28 +50,70 @@ namespace EventLibrary.DB
                         {
                             context.Events.Add(item);
                             context.SaveChanges();
-                            try
-                            {
-                                var body = _emailService.PrepareBody(item);
-                                var mail = _emailService.Create(body);
-                                _emailService.Send(mail);
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e);
-                            }
                         }
                     }
                 }
             }
         }
-        public void ReadAll()
+        public IEnumerable<DB.Event> ReadAllToList()
         {
             using (ItEventsParserEntities context = new ItEventsParserEntities())
             {
                 if (context.Events.Any())
                 {
                     var ptx = (from r in context.Events select r);
+                    var newList = ptx.ToList<DB.Event>();
+                    return newList;
+                }
+                else
+                {
+                    throw new ArgumentException("Table is empty");
+                }
+            }
+        }
+        public string ReadSingle(string name)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    var ptx = context.Events.Find(name);
+                    return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
+                }
+                else
+                {
+                    return "Table is empty";
+                }
+            }
+        }
+        public string ReadSingle(int? id)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    var ptx = context.Events.Find(id);
+                    return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
+                }
+                else
+                {
+                    return "Table is empty";
+                }
+            }
+        }
+        public void DeleteSingle(int? id)
+        {
+            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            {
+                if (context.Events.Any())
+                {
+                    DB.Event db = new DB.Event()
+                    {
+                        id = id ?? default(int)
+                    };
+                    context.Events.Attach(db);
+                    context.Events.Remove(db);
+                    context.SaveChanges();
                 }
                 else
                 {
@@ -78,20 +121,19 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public void ReadSingle(int? id, string name)
+        public void DeleteSingle(string name)
         {
             using (ItEventsParserEntities context = new ItEventsParserEntities())
             {
                 if (context.Events.Any())
                 {
-                    if (id != null && name == null)
+                    DB.Event db = new DB.Event()
                     {
-                        var ptx = (from r in context.Events where r.id == id select r);
-                    }
-                    else
-                    {
-                        var ptx = (from r in context.Events where r.Name == name select r);
-                    }
+                        Name = name
+                    };
+                    context.Events.Attach(db);
+                    context.Events.Remove(db);
+                    context.SaveChanges();
                 }
                 else
                 {
@@ -99,30 +141,38 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public void DeleteSingle(string name, int? id)
+        public void UpdateEvent(int? dbEventId, DB.Event newEvent)
         {
             using (ItEventsParserEntities context = new ItEventsParserEntities())
             {
                 if (context.Events.Any())
                 {
-                    if (id != null && name == null)
+                    var dep = context.Events.First(item => item.id == dbEventId);
+                    if (newEvent.Name != null)
                     {
-                        DB.Event db = new DB.Event()
-                        {
-                            id = id ?? default(int)
-                        };
-                        context.Events.Remove(db);
-                        context.SaveChanges();
+                        dep.Name = newEvent.Name;
                     }
-                    else
+                    if (newEvent.City != null)
                     {
-                        DB.Event db = new DB.Event()
-                        {
-                            Name = name
-                        };
-                        context.Events.Remove(db);
-                        context.SaveChanges();
+                        dep.City = newEvent.City;
                     }
+                    if (newEvent.Date != null)
+                    {
+                        dep.Date = newEvent.Date;
+                    }
+                    if (newEvent.Description != null)
+                    {
+                        dep.Description = newEvent.Description;
+                    }
+                    if (newEvent.Link != null)
+                    {
+                        dep.Link = newEvent.Link;
+                    }
+                    if (newEvent.HasSentEmail != null)
+                    {
+                        dep.HasSentEmail = newEvent.HasSentEmail;
+                    }
+                    context.SaveChanges();
                 }
                 else
                 {
@@ -131,48 +181,39 @@ namespace EventLibrary.DB
             }
         }
 
-        public void UpdateEvent(int? dbEventId, string dbEventName, string newName, string newDesc, string newLink, string newCity, string newDate)
+        public void UpdateEvent(string dbEventName, DB.Event newEvent)
         {
             using (ItEventsParserEntities context = new ItEventsParserEntities())
             {
                 if (context.Events.Any())
                 {
-                    if (dbEventId != null && dbEventName == null)
+                    var dep = context.Events.First(item => item.Name == dbEventName);
+                    if (newEvent.Name != null)
                     {
-                        DB.Event db = new DB.Event()
-                        {
-                            Name = newName,
-                            City = newCity,
-                            Date = newDate,
-                            Description = newDesc,
-                            Link = newLink
-                        };
-                        var dep = context.Events.First(item => item.id == dbEventId);
-                        dep.Name = newName;
-                        dep.Description = newDesc;
-                        dep.City = newCity;
-                        dep.Date = newDate;
-                        dep.Link = newLink;
-                        context.SaveChanges();
+                        dep.Name = newEvent.Name;
                     }
-                    else
+                    if (newEvent.City != null)
                     {
-                        DB.Event db = new DB.Event()
-                        {
-                            Name = newName,
-                            City = newCity,
-                            Date = newDate,
-                            Description = newDesc,
-                            Link = newLink
-                        };
-                        var dep = context.Events.First(item => item.Name == dbEventName);
-                        dep.Name = newName;
-                        dep.Description = newDesc;
-                        dep.City = newCity;
-                        dep.Date = newDate;
-                        dep.Link = newLink;
-                        context.SaveChanges();
+                        dep.City = newEvent.City;
                     }
+                    if (newEvent.Date != null)
+                    {
+                        dep.Date = newEvent.Date;
+                    }
+                    if (newEvent.Description != null)
+                    {
+                        dep.Description = newEvent.Description;
+                    }
+                    if (newEvent.Link != null)
+                    {
+                        dep.Link = newEvent.Link;
+                    }
+                    if (newEvent.HasSentEmail != null)
+                    {
+                        dep.HasSentEmail = newEvent.HasSentEmail;
+                    }
+
+                    context.SaveChanges();
                 }
                 else
                 {
@@ -180,6 +221,19 @@ namespace EventLibrary.DB
                 }
             }
         }
+
+        //email
+        //    try
+        //    {
+        //        var body = _emailService.PrepareBody(item);
+        //        var mail = _emailService.Create(body);
+        //        _emailService.Send(mail);
+        //    }
+        //    catch (Exception e)
+        //{
+        //Console.WriteLine(e);
+        //}
+
 
         // wersja sql
         //private readonly string _connectionString = ConfigurationManager.AppSettings["connectionString"];
