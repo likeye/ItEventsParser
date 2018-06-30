@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ItEventsParserModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="ItEventsParserEntityModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Events">
           <Key>
             <PropertyRef Name="id" />
@@ -17,13 +17,14 @@
           <Property Name="City" Type="nvarchar(max)" Nullable="false" />
           <Property Name="HasSentEmail" Type="nvarchar" MaxLength="50" />
         </EntityType>
-        <EntityContainer Name="ItEventsParserModelStoreContainer">
+        <EntityContainer Name="ItEventsParserEntityModelStoreContainer">
           <EntitySet Name="Events" EntityType="Self.Events" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="ItEventsParserModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="ItEventsParserEntityModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Event">
           <Key>
             <PropertyRef Name="id" />
@@ -36,7 +37,7 @@
           <Property Name="City" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="HasSentEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityContainer Name="ItEventsParserEntities" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="ItEventsParserEntity" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Events" EntityType="Self.Event" />
         </EntityContainer>
       </Schema>
@@ -44,17 +45,17 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="ItEventsParserModelStoreContainer" CdmEntityContainer="ItEventsParserEntities">
+        <EntityContainerMapping StorageEntityContainer="ItEventsParserEntityModelStoreContainer" CdmEntityContainer="ItEventsParserEntity">
           <EntitySetMapping Name="Events">
-            <EntityTypeMapping TypeName="ItEventsParserModel.Event">
+            <EntityTypeMapping TypeName="ItEventsParserEntityModel.Event">
               <MappingFragment StoreEntitySet="Events">
-                <ScalarProperty Name="HasSentEmail" ColumnName="HasSentEmail" />
-                <ScalarProperty Name="City" ColumnName="City" />
                 <ScalarProperty Name="id" ColumnName="id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="HasSentEmail" ColumnName="HasSentEmail" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

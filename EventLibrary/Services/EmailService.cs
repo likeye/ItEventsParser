@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using EventLibrary.DB;
@@ -14,17 +15,22 @@ namespace EventLibrary.Services
         private readonly DataBaseOperations _dbOperations = new DataBaseOperations();
         private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
 
-        private string PrepareBody(DB.Event parsedEvent)
+        private string PrepareBody(IEnumerable<DB.Event> parsedEvents)
         {
-                DB.Event eventEmailSent = new Event()
-                    {HasSentEmail = "Yes"};
-                _dbOperations.UpdateEvent(parsedEvent.id, eventEmailSent);
-
-                string body = "";
-                body +=
-                    $"A new event has appeared!!! \n Event's name: {parsedEvent.Name} \n event's date: {parsedEvent.Date} \n" +
-                    $"event's description: {parsedEvent.Description} \n Link: {parsedEvent.Link} \n City {parsedEvent.City}";
-                return body;
+            string body = "";
+            foreach (var parsedEvent in parsedEvents)
+            {
+                if (parsedEvent.HasSentEmail != "Yes")
+                {
+                    DB.Event eventEmailSent = new Event()
+                    { HasSentEmail = "Yes" };
+                    _dbOperations.UpdateEvent(parsedEvent.id, eventEmailSent);
+                    body +=
+                        $"A new event has appeared!!! \n Event's name: {parsedEvent.Name} \n event's date: {parsedEvent.Date} \n" +
+                        $"event's description: {parsedEvent.Description} \n Link: {parsedEvent.Link} \n City {parsedEvent.City} \n";
+                }
+            }
+            return body;
         }
         private MailMessage Create(string body)
         {
@@ -37,22 +43,17 @@ namespace EventLibrary.Services
         }
         public void Send(IEnumerable<DB.Event> eventList)
         {
-            foreach (var dbEvent in eventList)
+            var body = PrepareBody(eventList);
+           
+            if (body.Any())
             {
-                if (dbEvent.HasSentEmail != "Yes")
-                {
-                    var body = PrepareBody(dbEvent);
-                    var mail = Create(body);
-                    _smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"],
-                        ConfigurationManager.AppSettings["password"]);
-                    _smtp.EnableSsl = true;
-                    _smtp.Send(mail);
-                }
-                else
-                {
-                    Console.WriteLine("Email has already been sent");
-                }
+                var mail = Create(body);
+                _smtp.Credentials = new NetworkCredential(ConfigurationManager.AppSettings["username"],
+                    ConfigurationManager.AppSettings["password"]);
+                _smtp.EnableSsl = true;
+                _smtp.Send(mail);
             }
         }
+           
     }
 }

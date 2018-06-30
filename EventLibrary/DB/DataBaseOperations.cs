@@ -31,7 +31,7 @@ namespace EventLibrary.DB
         public void Insert(IEnumerable<EventClasses.Event> eventsList)
         {
             var parsedList = ParseToDbEventList(eventsList);
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (!(context.Events.Any()))
                 {
@@ -57,7 +57,7 @@ namespace EventLibrary.DB
         }
         public IEnumerable<DB.Event> ReadAllToList()
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -73,7 +73,7 @@ namespace EventLibrary.DB
         }
         public string ReadSingle(string name)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -86,9 +86,9 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public string ReadSingle(int? id)
+        public string ReadSingle(int id)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -101,29 +101,25 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public void DeleteSingle(int? id)
+        public void DeleteSingle(int id)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
                     DB.Event db = new DB.Event()
                     {
-                        id = id ?? default(int)
+                        id = id 
                     };
                     context.Events.Attach(db);
                     context.Events.Remove(db);
                     context.SaveChanges();
                 }
-                else
-                {
-                    Console.WriteLine("Table is empty");
-                }
             }
         }
         public void DeleteSingle(string name)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -135,15 +131,11 @@ namespace EventLibrary.DB
                     context.Events.Remove(db);
                     context.SaveChanges();
                 }
-                else
-                {
-                    Console.WriteLine("Table is empty");
-                }
             }
         }
-        public void UpdateEvent(int? dbEventId, DB.Event newEvent)
+        public void UpdateEvent(int dbEventId, DB.Event newEvent)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -174,16 +166,12 @@ namespace EventLibrary.DB
                     }
                     context.SaveChanges();
                 }
-                else
-                {
-                    Console.WriteLine("Table is empty");
-                }
             }
         }
 
         public void UpdateEvent(string dbEventName, DB.Event newEvent)
         {
-            using (ItEventsParserEntities context = new ItEventsParserEntities())
+            using (ItEventsParserEntity context = new ItEventsParserEntity())
             {
                 if (context.Events.Any())
                 {
@@ -214,10 +202,6 @@ namespace EventLibrary.DB
                     }
 
                     context.SaveChanges();
-                }
-                else
-                {
-                    Console.WriteLine("Table is empty");
                 }
             }
         }

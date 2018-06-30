@@ -13,10 +13,10 @@ namespace EventLibrary.DB
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ItEventsParserEntities : DbContext
+    public partial class ItEventsParserEntity : DbContext
     {
-        public ItEventsParserEntities()
-            : base("name=ItEventsParserEntities")
+        public ItEventsParserEntity()
+            : base("name=ItEventsParserEntity")
         {
         }
     
