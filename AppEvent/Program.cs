@@ -28,17 +28,6 @@ namespace AppEvent
                 Console.WriteLine("\n All done");
                 Thread.Sleep(60 *1000 * int.Parse(ConfigurationManager.AppSettings["Time"]));
             }
-            //Console.WriteLine("");
-            //Console.WriteLine(dbOperations.ReadSingle(22));
-
-            //dbOperations.DeleteSingle(2);
-
-            //EventLibrary.DB.Event eventsAb = new Event()
-            //{
-            //    Name = "Bak",
-            //    Date = "22.22.22"
-            //};
-            //dbOperations.UpdateEvent(2,eventsAb);
         }
     }
 }
