@@ -1,9 +1,6 @@
 ﻿using EventLibrary.Interfaces;
-using EventLibrary.Services;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations;
-using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 
 namespace EventLibrary.DB
@@ -168,7 +165,6 @@ namespace EventLibrary.DB
                 }
             }
         }
-
         public void UpdateEvent(string dbEventName, DB.Event newEvent)
         {
             using (ItEventsParserEntity context = new ItEventsParserEntity())
@@ -205,60 +201,6 @@ namespace EventLibrary.DB
                 }
             }
         }
-
-        //email
-        //    try
-        //    {
-        //        var body = _emailService.PrepareBody(item);
-        //        var mail = _emailService.Create(body);
-        //        _emailService.Send(mail);
-        //    }
-        //    catch (Exception e)
-        //{
-        //Console.WriteLine(e);
-        //}
-
-
-        // wersja sql
-        //private readonly string _connectionString = ConfigurationManager.AppSettings["connectionString"];
-        // private readonly string _query = Resource1.query;
-        //public void Insert(IEnumerable<Event> eventsList)
-        //{
-        //using (SqlConnection connection = new SqlConnection(_connectionString))
-        //{
-        //    foreach (var item in eventsList)
-        //    {
-        //        using (SqlCommand command = new SqlCommand(_query, connection))
-        //        {
-        //            connection.Open();
-
-
-        //            command.Parameters.AddWithValue("@name", item.Name);
-        //            command.Parameters.AddWithValue("@date", item.Date);
-        //            command.Parameters.AddWithValue("@description", item.Description);
-        //            command.Parameters.AddWithValue("@link", item.Link);
-        //            int result = command.ExecuteNonQuery();
-        //            if (result < 0)
-        //            {
-        //                Console.WriteLine("Error inserting data");
-        //            }
-        //            else
-        //            {
-        //                try
-        //                {
-        //                    var body = _emailService.PrepareBody(item);
-        //                    var mail = _emailService.Create(body);
-        //                    _emailService.Send(mail);
-        //                }
-        //                catch (Exception e)
-        //                {
-        //                    Console.WriteLine(e);
-        //                }
-        //            }
-        //            connection.Close();
-        //        }
-        //    }
-        //}
     }
 }
 

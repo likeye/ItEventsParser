@@ -1,12 +1,10 @@
-﻿using EventLibrary.Interfaces;
-using System;
+﻿using EventLibrary.DB;
+using EventLibrary.Interfaces;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
-using EventLibrary.DB;
-using NUnit.Framework.Internal.Commands;
 
 namespace EventLibrary.Services
 {
@@ -14,7 +12,6 @@ namespace EventLibrary.Services
     {
         private readonly DataBaseOperations _dbOperations = new DataBaseOperations();
         private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
-
         private string PrepareBody(IEnumerable<DB.Event> parsedEvents)
         {
             string body = "";
@@ -54,6 +51,5 @@ namespace EventLibrary.Services
                 _smtp.Send(mail);
             }
         }
-           
     }
 }

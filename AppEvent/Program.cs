@@ -1,10 +1,9 @@
 ﻿using EventClasses.EventParser;
 using EventLibrary.DB;
+using EventLibrary.Services;
 using System;
 using System.Configuration;
 using System.Threading;
-using EventLibrary.Services;
-using NUnit.Framework.Internal;
 
 namespace AppEvent
 {
@@ -20,7 +19,6 @@ namespace AppEvent
             eventsParser.ShowParsedList(eventsList);
             while (true)
             {
-                
                 Console.WriteLine("*** calling MyMethod *** ");
                 dbOperations.Insert(eventsList);
                 var eventsListFromDB = dbOperations.ReadAllToList();

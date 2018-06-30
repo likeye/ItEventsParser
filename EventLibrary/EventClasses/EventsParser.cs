@@ -82,7 +82,6 @@ namespace EventClasses.EventParser
             }
             return _eventsList;
         }
-
         public void ShowParsedList(IEnumerable<Event> list)
         {
             foreach (var item in list)
@@ -107,7 +106,6 @@ namespace EventClasses.EventParser
                 var nodes = node1.Elements("div");
                 return nodes;
             }
-
         }
         private string NodeName(HtmlNode item)
         {
