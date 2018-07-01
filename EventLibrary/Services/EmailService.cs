@@ -11,7 +11,7 @@ namespace EventLibrary.Services
     public class EmailService : IEmail
     {
         private readonly DataBaseOperations _dbOperations = new DataBaseOperations();
-        private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["SmtpPort"]));
+        private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["smtpPort"]));
         private string PrepareBody(IEnumerable<DB.Event> parsedEvents)
         {
             string body = "";
@@ -41,7 +41,7 @@ namespace EventLibrary.Services
         public void Send(IEnumerable<DB.Event> eventList)
         {
             var body = PrepareBody(eventList);
-           
+
             if (body.Any())
             {
                 var mail = Create(body);

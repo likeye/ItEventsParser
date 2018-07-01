@@ -106,7 +106,7 @@ namespace EventLibrary.DB
                 {
                     DB.Event db = new DB.Event()
                     {
-                        id = id 
+                        id = id
                     };
                     context.Events.Attach(db);
                     context.Events.Remove(db);

@@ -84,8 +84,9 @@
     <Compile Include="DB\Event.cs">
       <DependentUpon>ModelSqlServer.tt</DependentUpon>
     </Compile>
-    <Compile Include="EventClasses\Event.cs" />
-    <Compile Include="EventClasses\EventsParser.cs" />
+    <Compile Include="Model\Event.cs" />
+    <Compile Include="Model\ParseConfiguration.cs" />
+    <Compile Include="Services\EventsParser.cs" />
     <Compile Include="Interfaces\IDbOperations.cs" />
     <Compile Include="Interfaces\IParse.cs" />
     <Compile Include="Interfaces\IEmail.cs" />
