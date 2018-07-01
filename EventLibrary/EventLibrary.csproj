@@ -81,54 +81,20 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DB\DataBaseOperations.cs" />
-    <Compile Include="DB\Event.cs">
-      <DependentUpon>ModelSqlServer.tt</DependentUpon>
-    </Compile>
+    <Compile Include="DB\ItEventsParserDbContext.cs" />
+    <Compile Include="DB\Events.cs" />
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Model\Event.cs" />
     <Compile Include="Model\ParseConfiguration.cs" />
     <Compile Include="Services\EventsParser.cs" />
     <Compile Include="Interfaces\IDbOperations.cs" />
     <Compile Include="Interfaces\IParse.cs" />
     <Compile Include="Interfaces\IEmail.cs" />
-    <Compile Include="DB\ModelSqlServer.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSqlServer.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DB\ModelSqlServer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSqlServer.tt</DependentUpon>
-    </Compile>
-    <Compile Include="DB\ModelSqlServer.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModelSqlServer.edmx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\EmailService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="DB\ModelSqlServer.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>ModelSqlServer.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <None Include="DB\ModelSqlServer.edmx.diagram">
-      <DependentUpon>ModelSqlServer.edmx</DependentUpon>
-    </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="DB\ModelSqlServer.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelSqlServer.edmx</DependentUpon>
-      <LastGenOutput>ModelSqlServer.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="DB\ModelSqlServer.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ModelSqlServer.edmx</DependentUpon>
-      <LastGenOutput>ModelSqlServer.cs</LastGenOutput>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">

@@ -12,14 +12,14 @@ namespace EventLibrary.Services
     {
         private readonly DataBaseOperations _dbOperations = new DataBaseOperations();
         private readonly SmtpClient _smtp = new SmtpClient(ConfigurationManager.AppSettings["host"], int.Parse(ConfigurationManager.AppSettings["smtpPort"]));
-        private string PrepareBody(IEnumerable<DB.Event> parsedEvents)
+        private string PrepareBody(IEnumerable<DB.Events> parsedEvents)
         {
             string body = "";
             foreach (var parsedEvent in parsedEvents)
             {
                 if (parsedEvent.HasSentEmail != "Yes")
                 {
-                    DB.Event eventEmailSent = new Event()
+                    DB.Events eventEmailSent = new Events()
                     { HasSentEmail = "Yes" };
                     _dbOperations.UpdateEvent(parsedEvent.id, eventEmailSent);
                     body +=
@@ -38,7 +38,7 @@ namespace EventLibrary.Services
             mail.Body = body;
             return mail;
         }
-        public void Send(IEnumerable<DB.Event> eventList)
+        public void Send(IEnumerable<DB.Events> eventList)
         {
             var body = PrepareBody(eventList);
 

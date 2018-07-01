@@ -7,12 +7,12 @@ namespace EventLibrary.DB
 {
     public class DataBaseOperations : IDbOperations
     {
-        private readonly List<DB.Event> _eventList = new List<DB.Event>();
-        private List<DB.Event> ParseToDbEventList(IEnumerable<EventClasses.Event> eventsList)
+        private readonly List<DB.Events> _eventList = new List<DB.Events>();
+        private List<DB.Events> ParseToDbEventList(IEnumerable<EventClasses.Event> eventsList)
         {
             foreach (var item in eventsList)
             {
-                DB.Event dbEvent = new Event
+                DB.Events dbEvent = new Events
                 {
                     Date = item.Date,
                     Description = item.Description,
@@ -28,7 +28,7 @@ namespace EventLibrary.DB
         public void Insert(IEnumerable<EventClasses.Event> eventsList)
         {
             var parsedList = ParseToDbEventList(eventsList);
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (!(context.Events.Any()))
                 {
@@ -52,14 +52,14 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public IEnumerable<DB.Event> ReadAllToList()
+        public IEnumerable<DB.Events> ReadAllToList()
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
                     var ptx = (from r in context.Events select r);
-                    var newList = ptx.ToList<DB.Event>();
+                    var newList = ptx.ToList<DB.Events>();
                     return newList;
                 }
                 else
@@ -70,7 +70,7 @@ namespace EventLibrary.DB
         }
         public string ReadSingle(string name)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
@@ -85,7 +85,7 @@ namespace EventLibrary.DB
         }
         public string ReadSingle(int id)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
@@ -100,11 +100,11 @@ namespace EventLibrary.DB
         }
         public void DeleteSingle(int id)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
-                    DB.Event db = new DB.Event()
+                    DB.Events db = new DB.Events()
                     {
                         id = id
                     };
@@ -116,11 +116,11 @@ namespace EventLibrary.DB
         }
         public void DeleteSingle(string name)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
-                    DB.Event db = new DB.Event()
+                    DB.Events db = new DB.Events()
                     {
                         Name = name
                     };
@@ -130,9 +130,9 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public void UpdateEvent(int dbEventId, DB.Event newEvent)
+        public void UpdateEvent(int dbEventId, DB.Events newEvent)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (ItEventsParserDbContext context = new ItEventsParserDbContext())
             {
                 if (context.Events.Any())
                 {
