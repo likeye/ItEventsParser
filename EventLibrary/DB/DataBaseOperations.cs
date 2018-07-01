@@ -165,42 +165,6 @@ namespace EventLibrary.DB
                 }
             }
         }
-        public void UpdateEvent(string dbEventName, DB.Event newEvent)
-        {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
-            {
-                if (context.Events.Any())
-                {
-                    var dep = context.Events.First(item => item.Name == dbEventName);
-                    if (newEvent.Name != null)
-                    {
-                        dep.Name = newEvent.Name;
-                    }
-                    if (newEvent.City != null)
-                    {
-                        dep.City = newEvent.City;
-                    }
-                    if (newEvent.Date != null)
-                    {
-                        dep.Date = newEvent.Date;
-                    }
-                    if (newEvent.Description != null)
-                    {
-                        dep.Description = newEvent.Description;
-                    }
-                    if (newEvent.Link != null)
-                    {
-                        dep.Link = newEvent.Link;
-                    }
-                    if (newEvent.HasSentEmail != null)
-                    {
-                        dep.HasSentEmail = newEvent.HasSentEmail;
-                    }
-
-                    context.SaveChanges();
-                }
-            }
-        }
     }
 }
 

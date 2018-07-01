@@ -7,7 +7,6 @@ namespace EventLibrary.Interfaces
     {
         void Insert(IEnumerable<Event> eventsList);
         void UpdateEvent(int dbEventId, DB.Event newEvent);
-        void UpdateEvent(string dbEventName, DB.Event newEvent);
         void DeleteSingle(int id);
         void DeleteSingle(string name);
         string ReadSingle(int id);
