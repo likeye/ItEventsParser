@@ -5,8 +5,6 @@ VisualStudioVersion = 15.0.27703.2018
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLibrary", "EventLibrary\EventLibrary.csproj", "{FDE6D70F-26B4-4EFE-BC98-C55450E7C788}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLibrary_Tests", "EventLibrary_Tests\EventLibrary_Tests.csproj", "{082D41A0-911C-4323-97A7-EB2049779FB3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AppEvent", "AppEvent\AppEvent.csproj", "{BBD1CEBB-C13B-4575-A73B-61314327161F}"
 EndProject
 Global
@@ -19,10 +17,6 @@ Global
 		{FDE6D70F-26B4-4EFE-BC98-C55450E7C788}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDE6D70F-26B4-4EFE-BC98-C55450E7C788}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDE6D70F-26B4-4EFE-BC98-C55450E7C788}.Release|Any CPU.Build.0 = Release|Any CPU
-		{082D41A0-911C-4323-97A7-EB2049779FB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{082D41A0-911C-4323-97A7-EB2049779FB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{082D41A0-911C-4323-97A7-EB2049779FB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{082D41A0-911C-4323-97A7-EB2049779FB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBD1CEBB-C13B-4575-A73B-61314327161F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBD1CEBB-C13B-4575-A73B-61314327161F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBD1CEBB-C13B-4575-A73B-61314327161F}.Release|Any CPU.ActiveCfg = Release|Any CPU

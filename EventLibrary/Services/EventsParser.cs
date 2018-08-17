@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using EventLibrary.EventClasses;
 using EventLibrary.Interfaces;
 using EventLibrary.Model;
 using HtmlAgilityPack;
@@ -64,13 +63,14 @@ namespace EventLibrary.Services
 
         private Event CreateEvent(HtmlNode element, string item)
         {
-            Event eventParsed = new Event
+            var eventParsed = new Event
             {
                 Name = NodeName(element),
                 Date = NodeDate(element),
                 Description = NodeDesc(element),
                 Link = NodeLink(element),
-                City = item
+                City = item,
+                HasSentEmail = null
             };
             return eventParsed;
         }

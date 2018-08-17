@@ -1,4 +1,4 @@
-﻿namespace EventLibrary.EventClasses
+﻿namespace EventLibrary.Model
 {
     public class Event
     {

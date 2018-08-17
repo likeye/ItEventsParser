@@ -12,7 +12,7 @@ namespace EventLibrary.DB
     using System;
     using System.Collections.Generic;
     
-    public partial class Event
+    public partial class EventDb
     {
         public int id { get; set; }
         public string Name { get; set; }

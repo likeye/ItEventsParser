@@ -13,10 +13,10 @@ namespace EventLibrary.DB
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class ItEventsParserEntity : DbContext
+    public partial class EventsParserEntity : DbContext
     {
-        public ItEventsParserEntity()
-            : base("name=ItEventsParserEntity")
+        public EventsParserEntity()
+            : base("name=EventsParserEntity")
         {
         }
     
@@ -25,6 +25,6 @@ namespace EventLibrary.DB
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Event> Events { get; set; }
+        public virtual DbSet<EventDb> Events { get; set; }
     }
 }

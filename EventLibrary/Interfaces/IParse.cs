@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using EventLibrary.EventClasses;
 using EventLibrary.Model;
 
 namespace EventLibrary.Interfaces

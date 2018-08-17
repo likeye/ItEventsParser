@@ -1,18 +1,27 @@
 ﻿using EventLibrary.Interfaces;
+using EventLibrary.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MoreLinq;
 
 namespace EventLibrary.DB
 {
     public class DataBaseOperations : IDbOperations
     {
-        private readonly List<DB.Event> _eventList = new List<DB.Event>();
-        private List<DB.Event> ParseToDbEventList(IEnumerable<EventClasses.Event> eventsList)
+        private readonly List<EventDb> _eventList = new List<EventDb>();
+        private readonly EventsParserEntity _eventsParserEntity;
+
+        public DataBaseOperations()
+        {
+            _eventsParserEntity = new EventsParserEntity();
+        }
+
+        private List<EventDb> ParseToDbEventList(IEnumerable<Event> eventsList)
         {
             foreach (var item in eventsList)
             {
-                DB.Event dbEvent = new Event
+                var dbEvent = new EventDb
                 {
                     Date = item.Date,
                     Description = item.Description,
@@ -25,144 +34,122 @@ namespace EventLibrary.DB
             }
             return _eventList;
         }
-        public void Insert(IEnumerable<EventClasses.Event> eventsList)
+
+        public void Insert(IEnumerable<Event> eventsList)
         {
             var parsedList = ParseToDbEventList(eventsList);
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (!(context.Events.Any()))
+                if (!(_eventsParserEntity.Events.Any()))
                 {
-                    foreach (var item in parsedList)
+                    parsedList.ForEach(item =>
                     {
                         item.HasSentEmail = "Yes";
-                        context.Events.Add(item);
-                        context.SaveChanges();
-                    }
+                        _eventsParserEntity.Events.Add(item);
+                        _eventsParserEntity.SaveChanges();
+                    });
                 }
                 else
                 {
                     foreach (var item in parsedList)
                     {
-                        if (!(context.Events.Any(obj => obj.Name == item.Name && obj.Link == item.Link)))
-                        {
-                            context.Events.Add(item);
-                            context.SaveChanges();
-                        }
+                        if (_eventsParserEntity.Events.Any(obj => obj.Name == item.Name && obj.Link == item.Link))
+                            continue;
+                        _eventsParserEntity.Events.Add(item);
+                        _eventsParserEntity.SaveChanges();
                     }
                 }
             }
         }
-        public IEnumerable<DB.Event> ReadAllToList()
+        public IEnumerable<EventDb> ReadAllToList()
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
-                {
-                    var ptx = (from r in context.Events select r);
-                    var newList = ptx.ToList<DB.Event>();
-                    return newList;
-                }
-                else
-                {
-                    throw new ArgumentException("Table is empty");
-                }
+                if (!_eventsParserEntity.Events.Any()) throw new ArgumentException("Table is empty");
+                var ptx = (from r in _eventsParserEntity.Events select r);
+                var newList = ptx.ToList();
+                return newList;
             }
         }
         public string ReadSingle(string name)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
-                {
-                    var ptx = context.Events.Find(name);
-                    return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
-                }
-                else
-                {
-                    return "Table is empty";
-                }
+                if (!_eventsParserEntity.Events.Any()) return "Table is empty";
+                var ptx = _eventsParserEntity.Events.Find(name);
+                return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
+
             }
         }
         public string ReadSingle(int id)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
-                {
-                    var ptx = context.Events.Find(id);
-                    return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
-                }
-                else
-                {
-                    return "Table is empty";
-                }
+                if (!_eventsParserEntity.Events.Any()) return "Table is empty";
+                var ptx = _eventsParserEntity.Events.Find(id);
+                return $" name: {ptx.Name} \n date: {ptx.Date} \n desc: {ptx.Description} \n link: {ptx.Link} \n city: {ptx.City} \n sent: {ptx.HasSentEmail}";
+
             }
         }
         public void DeleteSingle(int id)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
+                if (!_eventsParserEntity.Events.Any()) return;
+                var db = new EventDb()
                 {
-                    DB.Event db = new DB.Event()
-                    {
-                        id = id
-                    };
-                    context.Events.Attach(db);
-                    context.Events.Remove(db);
-                    context.SaveChanges();
-                }
+                    id = id
+                };
+                _eventsParserEntity.Events.Attach(db);
+                _eventsParserEntity.Events.Remove(db);
+                _eventsParserEntity.SaveChanges();
             }
         }
         public void DeleteSingle(string name)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
+                if (!_eventsParserEntity.Events.Any()) return;
+                var db = new EventDb()
                 {
-                    DB.Event db = new DB.Event()
-                    {
-                        Name = name
-                    };
-                    context.Events.Attach(db);
-                    context.Events.Remove(db);
-                    context.SaveChanges();
-                }
+                    Name = name
+                };
+                _eventsParserEntity.Events.Attach(db);
+                _eventsParserEntity.Events.Remove(db);
+                _eventsParserEntity.SaveChanges();
             }
         }
-        public void UpdateEvent(int dbEventId, DB.Event newEvent)
+        public void UpdateEvent(int dbEventId, EventDb newEvent)
         {
-            using (ItEventsParserEntity context = new ItEventsParserEntity())
+            using (_eventsParserEntity)
             {
-                if (context.Events.Any())
+                if (!_eventsParserEntity.Events.Any()) return;
+                var dep = _eventsParserEntity.Events.First(item => item.id == dbEventId);
+                if (newEvent.Name != null)
                 {
-                    var dep = context.Events.First(item => item.id == dbEventId);
-                    if (newEvent.Name != null)
-                    {
-                        dep.Name = newEvent.Name;
-                    }
-                    if (newEvent.City != null)
-                    {
-                        dep.City = newEvent.City;
-                    }
-                    if (newEvent.Date != null)
-                    {
-                        dep.Date = newEvent.Date;
-                    }
-                    if (newEvent.Description != null)
-                    {
-                        dep.Description = newEvent.Description;
-                    }
-                    if (newEvent.Link != null)
-                    {
-                        dep.Link = newEvent.Link;
-                    }
-                    if (newEvent.HasSentEmail != null)
-                    {
-                        dep.HasSentEmail = newEvent.HasSentEmail;
-                    }
-                    context.SaveChanges();
+                    dep.Name = newEvent.Name;
                 }
+                if (newEvent.City != null)
+                {
+                    dep.City = newEvent.City;
+                }
+                if (newEvent.Date != null)
+                {
+                    dep.Date = newEvent.Date;
+                }
+                if (newEvent.Description != null)
+                {
+                    dep.Description = newEvent.Description;
+                }
+                if (newEvent.Link != null)
+                {
+                    dep.Link = newEvent.Link;
+                }
+                if (newEvent.HasSentEmail != null)
+                {
+                    dep.HasSentEmail = newEvent.HasSentEmail;
+                }
+                _eventsParserEntity.SaveChanges();
             }
         }
     }

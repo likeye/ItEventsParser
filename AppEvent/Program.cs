@@ -6,7 +6,7 @@ using System.Configuration;
 using System.Linq;
 using System.Threading;
 using EventLibrary.Model;
-using Event = EventLibrary.EventClasses.Event;
+using Event = EventLibrary.Model.Event;
 
 namespace AppEvent
 {
@@ -14,9 +14,9 @@ namespace AppEvent
     {
         static void Main(string[] args)
         {
-            EmailService emailService = new EmailService();
-            EventsParser eventsParser = new EventsParser();
-            DataBaseOperations dbOperations = new DataBaseOperations();
+            var emailService = new EmailService();
+            var eventsParser = new EventsParser();
+            var dbOperations = new DataBaseOperations();
 
             var eventList = eventsParser.Parse(new ParseConfiguration()
             {
@@ -31,7 +31,7 @@ namespace AppEvent
 
             while (true)
             {
-                Console.WriteLine("*** calling MyMethod *** ");
+                Console.WriteLine("*** calling method *** ");
                 dbOperations.Insert(events);
 
                 try
