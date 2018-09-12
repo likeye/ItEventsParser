@@ -20,21 +20,5 @@ namespace EventLibrary_Tests
             Assert.IsEmpty(result);
         }
 
-        [Test]
-        [AutoData]
-        //TestCase'y
-        public void Events_IsNotNull_ReturnMessage()
-        {
-            // Arrange
-            Fixture fixture = new Fixture();
-
-            var testEvent = fixture.Create<Event>();
-
-            IEmail mock = new EmailServiceMock();
-
-            var result = mock.PrepareBody(testEvent);
-
-            Assert.IsTrue(result.Length > 0);
-        }
     }
 }
